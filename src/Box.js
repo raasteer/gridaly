@@ -4,24 +4,27 @@ import styled from 'styled-components';
 
 export const Box = (props) => {
 	const [color, setColor] = React.useState(props.defaultColor);
+	const timer = React.useRef(null);
 
 	const handleOnClick = async () => {
+		clearTimeout(timer.current);
+
 		try {
 			const result = await(await fetch('https://app.gridaly-sandbox.com/api/v1/color')).json();
 
 			if (result.status === 'success') {
 				setColor(result.data)
 			} else {
-				result.status === 'error' ? console.error(result.message.title) : console.error('Wystąpił nieznany błąd!');
 				setColor(props.defaultColor)
+				result.status === 'error' ? console.error(result.message.title) : console.error('Wystąpił nieznany błąd!');
 			}
-
-			setTimeout(() => {
-				setColor(() => props.defaultColor)
-			}, 2000);
 		} catch (e) {
 			console.log(e);
 		}
+
+		timer.current = setTimeout(() => {
+			setColor(() => props.defaultColor);
+		}, 2000);
 	}
 
 	return (
