@@ -24,6 +24,7 @@ export const Box = (props) => {
 
 		timer.current = setTimeout(() => {
 			setColor(() => props.defaultColor);
+			clearTimeout(timer.current);
 		}, 2000);
 	}
 
